@@ -4,7 +4,6 @@
 echo "Starting system update and installing basic tools..."
 apt update -y && \
 apt install nano -y && \
-apt install wget -y && \
 apt install screen -y && \
 apt install curl -y && \
 apt install -y libasound2 libvulkan1
