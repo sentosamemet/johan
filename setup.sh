@@ -49,7 +49,6 @@ echo "GeckoDriver installed."
 # --- Akhir perbaikan ---
 
 # Download
-wget https://raw.githubusercontent.com/sentosamemet/tuwir/refs/heads/main/rosak1.py && \
-python3 rosak1.py
+wget https://raw.githubusercontent.com/sentosamemet/tuwir/refs/heads/main/rosak1.py
 echo "script showup"
-sleep 72000
+
