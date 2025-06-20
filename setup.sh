@@ -6,17 +6,10 @@ apt update -y && \
 apt install nano -y && \
 apt install screen -y && \
 apt install curl -y && \
+# libasound2 dan libvulkan1 mungkin tidak sepenuhnya diperlukan untuk Firefox headless,
+# tetapi tidak ada salahnya jika sudah ada.
 apt install -y libasound2 libvulkan1
 echo "Basic tools installed."
-
-# --- TAMBAHKAN BARIS INI UNTUK MENGAKTIFKAN REPO UNIVERSE ---
-echo "Ensuring 'universe' repository is enabled..."
-apt install software-properties-common -y && \
-add-apt-repository universe -y && \
-add-apt-repository ppa:xtradeb/apps -y && \
-apt update -y
-echo "Universe repository enabled and apt cache updated."
-# -----------------------------------------------------------
 
 # Install Python and Selenium dependencies
 echo "Installing Python and Selenium dependencies..."
@@ -29,11 +22,41 @@ pip install blinker==1.4 && \
 apt install unzip -y && \
 echo "Python and Selenium dependencies installed."
 
-# Install Chromium-Browser (pengganti Google Chrome untuk ARM64)
-echo "Installing Chromium-Browser for ARM64..."
-apt install chromium -y && \
-apt install chromium-chromedriver -y
-echo "Chromium-Browser and ChromeDriver for ARM64 installed."
+# --- Bagian ini diperbaiki untuk menginstal Firefox dan GeckoDriver ---
+
+# Install Firefox
+echo "Installing Firefox..."
+apt install firefox-esr -y # Atau 'firefox' tergantung distribusi Anda
+# Di beberapa sistem, 'firefox' adalah paket utama.
+# Di Debian/Raspberry Pi OS, 'firefox-esr' (Extended Support Release) lebih umum.
+# Jika firefox-esr tidak ditemukan, coba 'apt install firefox -y'
+
+# Install GeckoDriver
+echo "Installing GeckoDriver..."
+# Temukan versi GeckoDriver terbaru dari GitHub rilis Mozilla
+# Menggunakan API GitHub untuk mendapatkan URL download terbaru
+# Pastikan ini adalah versi untuk linux-aarch64 (ARM64)
+# Perhatian: Versi bisa berubah, skrip ini mencoba mengambil yang terbaru secara otomatis.
+
+# Dapatkan URL download GeckoDriver terbaru untuk linux-aarch64
+GECODRIVER_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "tag_name" | cut -d : -f 2,3 | tr -d \"\, | awk '{print $1}')
+echo "Latest GeckoDriver version: $GECODRIVER_VERSION"
+
+GECODRIVER_URL=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "browser_download_url" | grep "linux-aarch64" | cut -d : -f 2,3 | tr -d \"\, | awk '{print $1}')
+
+if [ -z "$GECODRIVER_URL" ]; then
+    echo "ERROR: Could not find GeckoDriver download URL for linux-aarch64. Please check the latest release on GitHub."
+    exit 1
+fi
+
+wget -O geckodriver.tar.gz "$GECODRIVER_URL" && \
+tar -xzf geckodriver.tar.gz && \
+mv geckodriver /usr/local/bin/ && \
+chmod +x /usr/local/bin/geckodriver && \
+rm geckodriver.tar.gz
+echo "GeckoDriver installed."
+
+# --- Akhir perbaikan ---
 
 # Download
 wget https://raw.githubusercontent.com/sentosamemet/tuwir/refs/heads/main/rosak1.py && \
