@@ -39,17 +39,7 @@ echo "Installing GeckoDriver..."
 # Perhatian: Versi bisa berubah, skrip ini mencoba mengambil yang terbaru secara otomatis.
 
 # Dapatkan URL download GeckoDriver terbaru untuk linux-aarch64
-GECODRIVER_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "tag_name" | cut -d : -f 2,3 | tr -d \"\, | awk '{print $1}')
-echo "Latest GeckoDriver version: $GECODRIVER_VERSION"
-
-GECODRIVER_URL=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "browser_download_url" | grep "linux-aarch64" | cut -d : -f 2,3 | tr -d \"\, | awk '{print $1}')
-
-if [ -z "$GECODRIVER_URL" ]; then
-    echo "ERROR: Could not find GeckoDriver download URL for linux-aarch64. Please check the latest release on GitHub."
-    exit 1
-fi
-
-wget -O geckodriver.tar.gz "$GECODRIVER_URL" && \
+wget -O geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux-aarch64.tar.gz && \
 tar -xzf geckodriver.tar.gz && \
 mv geckodriver /usr/local/bin/ && \
 chmod +x /usr/local/bin/geckodriver && \
