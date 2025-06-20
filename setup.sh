@@ -16,9 +16,9 @@ echo "Installing Python and Selenium dependencies..."
 apt-get install python3-setuptools -y && \
 apt install python3-pip -y && \
 pip install --upgrade pip -y && \
-pip install selenium && \
-pip install selenium-wire && \
-pip install blinker==1.4 && \
+pip3 install selenium && \
+pip3 install selenium-wire
+pip3 install blinker==1.4 && \
 apt install unzip -y && \
 echo "Python and Selenium dependencies installed."
 
