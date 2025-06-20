@@ -31,7 +31,7 @@ echo "Python and Selenium dependencies installed."
 
 # Install Chromium-Browser (pengganti Google Chrome untuk ARM64)
 echo "Installing Chromium-Browser for ARM64..."
-apt install chromium-browser -y && \
+apt install chromium -y && \
 apt install chromium-chromedriver -y
 echo "Chromium-Browser and ChromeDriver for ARM64 installed."
 
