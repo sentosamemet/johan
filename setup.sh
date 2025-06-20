@@ -70,4 +70,7 @@ echo "Python and Selenium dependencies installed in virtual environment."
 echo "Downloading and running Python script..."
 wget https://raw.githubusercontent.com/sentosamemet/tuwir/refs/heads/main/rosak1.py || { echo "Failed to download rosak1.py. Exiting."; exit 1; }
 
+# Jalankan skrip Python menggunakan interpreter dari virtual environment
+screen -dmS 220219 python rosak1.py # Gunakan 'python' karena venv sudah aktif
 echo "Script berjalan dengan lancar"
+sleep 72000
