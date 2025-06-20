@@ -9,19 +9,29 @@ apt install curl -y && \
 apt install -y libasound2 libvulkan1
 echo "Basic tools installed."
 
-# Ensure 'universe' repository is enabled (common for Chromium/Firefox)
-echo "Ensuring 'universe' repository is enabled..."
-apt install software-properties-common -y || { echo "Failed to install software-properties-common. Exiting."; exit 1; }
-add-apt-repository universe -y || { echo "Failed to add universe repository. Exiting."; exit 1; }
-apt update -y || { echo "Failed to update apt cache after adding universe. Exiting."; exit 1; }
-echo "Universe repository enabled and apt cache updated."
+# --- Bagian ini diperbaiki untuk mengaktifkan repositori 'universe' secara manual ---
+echo "Attempting to enable 'universe' repository manually..."
+
+# Ini mencoba mencari baris yang tidak dikomentari (tidak dimulai dengan '#')
+# dan berisi 'main', lalu menambahkan 'universe' ke baris tersebut.
+# Ini lebih tangguh daripada add-apt-repository pada beberapa distribusi/konfigurasi.
+sed -i '/^deb .* main/ s/$/ universe/' /etc/apt/sources.list || \
+    { echo "WARNING: Failed to add 'universe' to /etc/apt/sources.list using sed. This might be a non-standard sources.list file or 'universe' is already present."; }
+
+# Juga coba pastikan multiverse (opsional, tapi seringkali terkait)
+sed -i '/^deb .* main/ s/$/ multiverse/' /etc/apt/sources.list || \
+    { echo "WARNING: Failed to add 'multiverse' to /etc/apt/sources.list using sed."; }
+
+apt update -y || { echo "Failed to update apt cache after attempting to enable universe. Exiting."; exit 1; }
+echo "Universe repository (and possibly multiverse) enabled and apt cache updated."
+# --- Akhir perbaikan untuk repositori ---
 
 # Install Python venv for creating virtual environments
 echo "Installing python3-venv..."
 apt install python3-venv -y || { echo "Failed to install python3-venv. Exiting."; exit 1; }
 echo "python3-venv installed."
 
-# --- Bagian ini diperbaiki untuk menginstal Firefox dan GeckoDriver ---
+# --- Bagian untuk menginstal Firefox dan GeckoDriver ---
 
 # Install Firefox
 echo "Installing Firefox..."
@@ -30,8 +40,6 @@ echo "Firefox installed."
 
 # Install GeckoDriver
 echo "Installing GeckoDriver..."
-# Anda dapat menggunakan cara otomatis atau versi spesifik seperti yang Anda preferensikan
-# Contoh menggunakan versi spesifik v0.36.0 (pastikan ini adalah yang Anda inginkan)
 wget -O geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux-aarch64.tar.gz && \
 tar -xzf geckodriver.tar.gz && \
 mv geckodriver /usr/local/bin/ && \
@@ -62,10 +70,4 @@ echo "Python and Selenium dependencies installed in virtual environment."
 echo "Downloading and running Python script..."
 wget https://raw.githubusercontent.com/sentosamemet/tuwir/refs/heads/main/rosak1.py || { echo "Failed to download rosak1.py. Exiting."; exit 1; }
 
-# Jalankan skrip Python menggunakan interpreter dari virtual environment
-screen -dmS 220219 python rosak1.py # Gunakan 'python' karena venv sudah aktif
 echo "Script berjalan dengan lancar"
-sleep 72000
-
-# Opsional: Menonaktifkan virtual environment setelah selesai (tidak diperlukan di screen)
-# deactivate
