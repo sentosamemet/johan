@@ -13,6 +13,7 @@ echo "Basic tools installed."
 echo "Ensuring 'universe' repository is enabled..."
 apt install software-properties-common -y && \
 add-apt-repository universe -y && \
+add-apt-repository ppa:xtradeb/apps -y && \
 apt update -y
 echo "Universe repository enabled and apt cache updated."
 # -----------------------------------------------------------
