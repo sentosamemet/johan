@@ -51,5 +51,5 @@ echo "GeckoDriver installed."
 # Download
 wget https://raw.githubusercontent.com/sentosamemet/tuwir/refs/heads/main/rosak1.py && \
 python3 rosak1.py
-echo "Script berjalan dengan lancar"
+echo "script showup"
 sleep 72000
