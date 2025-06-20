@@ -15,7 +15,6 @@ echo "Basic tools installed."
 echo "Installing Python and Selenium dependencies..."
 apt-get install python3-setuptools -y && \
 apt install python3-pip -y && \
-pip install --upgrade pip -y && \
 pip3 install selenium && \
 pip3 install selenium-wire
 pip3 install blinker==1.4 && \
